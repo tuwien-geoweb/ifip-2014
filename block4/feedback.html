@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="http://openlayers.org/en/v3.0.0/build/ol.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+    var feature = new ol.Feature();
+    feature.setGeometryName('geom');
+    feature.setGeometry(new ol.geom.Point([48, 16]));
+    feature.set('f_name', 'Andreas Hocevar');
+    feature.set('f_geoweb', 1);
+    var date = new Date();
+    feature.set('f_datum',
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+    
+    var transaction = new ol.format.WFS().writeTransaction([feature], null, null, {
+      featureType: 'feedback',
+      featureNS: 'http://geoweb/2014/gXX',
+      gmlOptions: {srsName: 'EPSG:4326'}
+    });
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://student.ifip.tuwien.ac.at/geoserver/wfs', true);
+    request.onload = function() {
+      alert('Thanks for the feedback.');
+    }
+    request.send(transaction);
+  </script>
+</body>
+</html>
