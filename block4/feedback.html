@@ -16,16 +16,15 @@
     
     var transaction = new ol.format.WFS().writeTransaction([feature], null, null, {
       featureType: 'feedback',
-      featureNS: 'http://geoweb/2014/gXX',
+      featureNS: 'http://geoweb/2014/ifip',
       gmlOptions: {srsName: 'EPSG:4326'}
     });
     var request = new XMLHttpRequest();
     request.open('POST', 'http://student.ifip.tuwien.ac.at/geoserver/wfs', true);
-    request.setRequestHeader('Content-type', 'application/xml');
     request.onload = function() {
       alert('Thanks for the feedback.');
     }
-    request.send(transaction);
+    request.send(new XMLSerializer().serializeToString(transaction));
   </script>
 </body>
 </html>
