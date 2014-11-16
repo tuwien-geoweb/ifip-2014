@@ -22,7 +22,7 @@
     var request = new XMLHttpRequest();
     request.open('POST', 'http://student.ifip.tuwien.ac.at/geoserver/wfs', true);
     request.onload = function() {
-      alert('Thanks for the feedback.');
+      alert(request.responseText);
     }
     request.send(new XMLSerializer().serializeToString(transaction));
   </script>
