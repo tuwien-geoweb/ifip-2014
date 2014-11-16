@@ -21,6 +21,7 @@
     });
     var request = new XMLHttpRequest();
     request.open('POST', 'http://student.ifip.tuwien.ac.at/geoserver/wfs', true);
+    request.setRequestHeader('Content-type', 'application/xml');
     request.onload = function() {
       alert('Thanks for the feedback.');
     }
