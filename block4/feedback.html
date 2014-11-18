@@ -55,9 +55,10 @@
       }
       feature.set('f_name', form.name.value);
       feature.set('f_mail', form.email.value);
-      form.geschlecht.forEach(function(item) {
-        if (item.checked) {
-          feature.set('f_anrede', item.value);
+      for (var i = form.geschlecht.length - 1; i >= 0; --i) {
+        if (form.geschlecht[i].checked) {
+          feature.set('f_anrede', form.geschlecht[i].value);
+          break
         }
       });
       feature.set('f_msg', form.message.value);
