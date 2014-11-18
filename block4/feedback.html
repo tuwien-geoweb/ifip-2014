@@ -23,8 +23,9 @@
     <input type="checkbox" name="team" checked="checked" value="ON" />
            Ich bin Mitglied des geoweb-Teams
     <br /><br />
-    Location (lon, lat): <br />
-    <input type="text" name="location" size="40" readonly />
+    Location: <br />
+    latitude: <input type="text" name="lat" size="15" readonly />
+    longitude: <input type="text" name="lon" size="15" readonly />
     <br /><br />
     <input type="submit" value="Abschicken">
     <input type="reset" value="Zurücksetzen"> <br /><br />
@@ -42,16 +43,17 @@
     geolocation.setTracking(true);
     geolocation.on('change', function(evt) {
       geolocation.setTracking(false);
-      form.location.value = geolocation.getPosition().join(', ');
+      var location = geolocation.getPosition();
+      form.lon.value = location[0];
+      form.lat.value = location[1];
     });
 
     function submitForm() {
       var feature = new ol.Feature();
-      if (form.location.value) {
+      if (form.lon.value && form.lat.value) {
         feature.setGeometryName('geom');
-        var location = form.location.value.split(', ');
-        location.forEach(function(value, index) { location[index] = parseInt(value); });
-        feature.setGeometry(new ol.geom.Point(location));
+        feature.setGeometry(new ol.geom.Point(
+            [parseInt(form.lon.value), parseInt(form.lat.value)]));
       }
       feature.set('f_name', form.name.value);
       feature.set('f_mail', form.email.value);
