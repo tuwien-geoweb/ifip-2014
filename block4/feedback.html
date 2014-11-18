@@ -24,7 +24,7 @@
            Ich bin Mitglied des geoweb-Teams <br /><br />
     <br />
     Location (lon, lat): <br />
-    <input type="text" name="location" size="100" readonly />
+    <input type="text" name="location" size="50" readonly />
     <input type="submit" value="Abschicken">
     <input type="reset" value="Zurücksetzen"> <br /><br />
     Ihr Feedback wird per E-Mail an die Autoren/innen zugestellt<br>
@@ -38,7 +38,9 @@
       projection: 'EPSG:4326'
     });
     // listen to changes in position
+    geolocation.setTracking(true);
     geolocation.on('change', function(evt) {
+      geolocation.setTracking(false);
       form.location.value = geolocation.getPosition().join(', ');
     });
 
