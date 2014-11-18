@@ -58,7 +58,7 @@
       for (var i = form.geschlecht.length - 1; i >= 0; --i) {
         if (form.geschlecht[i].checked) {
           feature.set('f_anrede', form.geschlecht[i].value);
-          break
+          break;
         }
       }
       feature.set('f_msg', form.message.value);
