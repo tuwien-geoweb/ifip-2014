@@ -53,7 +53,7 @@
       if (form.lon.value && form.lat.value) {
         feature.setGeometryName('geom');
         feature.setGeometry(new ol.geom.Point(
-            [parseInt(form.lon.value), parseInt(form.lat.value)]));
+            [parseFloat(form.lon.value), parseFloat(form.lat.value)]));
       }
       feature.set('f_name', form.name.value);
       feature.set('f_mail', form.email.value);
