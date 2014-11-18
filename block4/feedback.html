@@ -39,21 +39,18 @@
     var geolocation = new ol.Geolocation({
       projection: 'EPSG:4326'
     });
-    // listen to changes in position
     geolocation.setTracking(true);
+    // Stop tracking once we have a position
     geolocation.on('change', function(evt) {
       geolocation.setTracking(false);
-      var location = geolocation.getPosition();
-      form.lon.value = location[0];
-      form.lat.value = location[1];
     });
 
     function submitForm() {
       var feature = new ol.Feature();
-      if (form.lon.value && form.lat.value) {
+      var position = geolocation.getPosition();
+      if (position) {
         feature.setGeometryName('geom');
-        feature.setGeometry(new ol.geom.Point(
-            [parseFloat(form.lon.value), parseFloat(form.lat.value)]));
+        feature.setGeometry(new ol.geom.Point(position));
       }
       feature.set('f_name', form.name.value);
       feature.set('f_mail', form.email.value);
