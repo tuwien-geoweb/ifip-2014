@@ -1,30 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>geoweb.m10 - Feedback</title>
   <script type="text/javascript" src="http://openlayers.org/en/v3.0.0/build/ol.js"></script>
 </head>
 <body>
+  <form action="javascript:submitForm();">
+    <input type="radio" name="geschlecht" value="Frau"/> Frau
+    <input type="radio" name="geschlecht" value="Herr"/> Herr<br />
+    <table>
+      <tr><td>Name:</td>
+         <td><input type="text" name="name" size="50" /></td>
+      </tr>
+      <tr><td>E-Mail: </td>
+         <td><input type="text" name="email" size="50" /></td>
+      </tr>
+    </table>
+    Feedback: <br />
+    <textarea name="message" rows="10" cols="50"></textarea>
+    <br />
+    Location (lon, lat): <br />
+    <input type="text" name="location" readonly />
+    <br />
+    <input type="checkbox" name="team" checked="checked" value="ON" />
+           Ich bin Mitglied des geoweb-Teams <br /><br />
+    <input type="submit" value="Abschicken">
+    <input type="reset" value="Zurücksetzen"> <br /><br />
+    Ihr Feedback wird per E-Mail an die Autoren/innen zugestellt<br>
+    und in der Projekt-Datenbank gespeichert.<br /><br />
+    <br />
+  </form>
   <script type="text/javascript">
-    var feature = new ol.Feature();
-    feature.setGeometryName('geom');
-    feature.setGeometry(new ol.geom.Point([16, 86]));
-    feature.set('f_name', 'Andreas Hocevar');
-    feature.set('f_geoweb', 1);
-    var date = new Date();
-    feature.set('f_datum',
-        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-    
-    var transaction = new ol.format.WFS().writeTransaction([feature], null, null, {
-      featureType: 'feedback',
-      featureNS: 'http://geoweb/2014/ifip',
-      gmlOptions: {srsName: 'EPSG:4326'}
+    var form = document.forms[0];
+
+    var geolocation = new ol.Geolocation({
+      tracking: true,
+      projection: 'EPSG:4326'
     });
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://student.ifip.tuwien.ac.at/geoserver/wfs', true);
-    request.onload = function() {
-      alert(request.responseText);
+    // listen to changes in position
+    geolocation.on('change', function(evt) {
+      form.location.value = geolocation.getPosition().join(', ');
+    });
+
+    function submitForm() {
+      var feature = new ol.Feature();
+      if (form.location.value) {
+        feature.setGeometryName('geom');
+        var location = form.location.value.split(', ');
+        location.forEach(function(value, index) { location[index] = parseInt(value); });
+        feature.setGeometry(new ol.geom.Point(location));
+      }
+      feature.set('f_name', form.name.value);
+      feature.set('f_mail', form.email.value);
+      feature.set('f_anrede', form.geschlecht.value);
+      feature.set('f_msg', form.message.value);
+      feature.set('f_geoweb', form.team.checked ? 1 : 0);
+      var date = new Date();
+      feature.set('f_datum',
+          date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+      
+      var transaction = new ol.format.WFS().writeTransaction([feature], null, null, {
+        featureType: 'feedback',
+        featureNS: 'http://geoweb/2014/ifip',
+        gmlOptions: {srsName: 'EPSG:4326'}
+      });
+
+      var request = new XMLHttpRequest();
+      request.open('POST', 'http://student.ifip.tuwien.ac.at/geoserver/wfs', true);
+      request.onload = function() {
+        alert(request.responseText);
+      }
+      request.send(new XMLSerializer().serializeToString(transaction));
     }
-    request.send(new XMLSerializer().serializeToString(transaction));
   </script>
 </body>
 </html>
