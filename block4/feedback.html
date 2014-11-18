@@ -55,7 +55,11 @@
       }
       feature.set('f_name', form.name.value);
       feature.set('f_mail', form.email.value);
-      feature.set('f_anrede', form.geschlecht.value);
+      form.geschlecht.forEach(function(item) {
+        if (item.checked) {
+          feature.set('f_anrede', item.value);
+        }
+      });
       feature.set('f_msg', form.message.value);
       feature.set('f_geoweb', form.team.checked ? 1 : 0);
       var date = new Date();
