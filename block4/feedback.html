@@ -5,6 +5,7 @@
   <script type="text/javascript" src="http://openlayers.org/en/v3.0.0/build/ol.js"></script>
 </head>
 <body>
+  <h2>Feedback-Formular</h2>
   <form action="javascript:submitForm();">
     <input type="radio" name="geschlecht" value="Frau"/> Frau
     <input type="radio" name="geschlecht" value="Herr"/> Herr<br />
@@ -19,11 +20,11 @@
     Feedback: <br />
     <textarea name="message" rows="10" cols="50"></textarea>
     <br />
-    Location (lon, lat): <br />
-    <input type="text" name="location" readonly />
-    <br />
     <input type="checkbox" name="team" checked="checked" value="ON" />
            Ich bin Mitglied des geoweb-Teams <br /><br />
+    <br />
+    Location (lon, lat): <br />
+    <input type="text" name="location" size="100" readonly />
     <input type="submit" value="Abschicken">
     <input type="reset" value="Zurücksetzen"> <br /><br />
     Ihr Feedback wird per E-Mail an die Autoren/innen zugestellt<br>
@@ -34,7 +35,6 @@
     var form = document.forms[0];
 
     var geolocation = new ol.Geolocation({
-      tracking: true,
       projection: 'EPSG:4326'
     });
     // listen to changes in position
