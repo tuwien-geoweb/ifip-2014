@@ -27,11 +27,17 @@
       </div>
     </div>
     <script type="text/javascript">
+      var marker = new ol.Feature();
       var map = new ol.Map({
         target: 'map',
         layers: [
           new ol.layer.Tile({
             source: new ol.source.MapQuest({layer: 'osm'})
+          }),
+          new ol.layer.Vector({
+            source: new ol.source.Vector({
+              features: [marker]
+            })
           })
         ],
         view: new ol.View({
@@ -48,6 +54,7 @@
       geolocation.on('change:position', function() {
         geolocation.setTracking(false);
         map.getView().setCenter(geolocation.getPosition());
+        marker.setGeometry(new ol.geom.Point(map.getCenter()));
       });
       
       var form = document.getElementById("search");
